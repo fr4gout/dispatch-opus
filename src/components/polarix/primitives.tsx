@@ -31,10 +31,11 @@ export function PanelHeader({
   accent = "amber",
 }: {
   title: string;
-  sub?: string;
-  right?: ReactNode;
+  sub?: string | undefined;
+  right?: ReactNode | undefined;
   accent?: "amber" | "cyan";
 }) {
+
   return (
     <div className="flex items-center justify-between gap-4 border-b border-white/10 px-5 py-3">
       <div className="flex items-center gap-3">
