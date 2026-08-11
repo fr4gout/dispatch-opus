@@ -1,0 +1,458 @@
+import type {
+  ActiveJob,
+  AdminMission,
+  CompanyData,
+  DriverSlot,
+  HistoryEntry,
+  HudData,
+  Invitation,
+  LeaderboardEntry,
+  NotificationItem,
+  Order,
+  Party,
+  PlayerData,
+  SkillBranch,
+  Vehicle,
+} from "./types";
+
+export const mockPlayer: PlayerData = {
+  name: "R. VALDEZ",
+  level: 24,
+  rank: "MASTER HAULER",
+  xp: 7420,
+  xpMax: 10000,
+  cash: 48250,
+  bank: 1284900,
+  totalEarnings: 3872400,
+  earningsGrowth: 12.4,
+  deliveries: 418,
+  deliveryBreakdown: [
+    { label: "Heavy", value: 164 },
+    { label: "Fragile", value: 92 },
+    { label: "High-Value", value: 108 },
+    { label: "Hazardous", value: 54 },
+  ],
+  distanceKm: 128_640,
+  reputation: "HIGHWAY LEGEND",
+  reputationProgress: 78,
+};
+
+export const mockOrders: Order[] = [
+  {
+    id: "PLX-8841",
+    cargo: "Reinforced Steel Beams",
+    category: "heavy",
+    weight: 34.2,
+    distance: 62.4,
+    reward: 24800,
+    xp: 620,
+    timeLimit: 48,
+    pickup: "Port of Los Santos",
+    dropoff: "Paleto Bay Yard",
+    pickupCoords: { x: 178, y: 690 },
+    dropoffCoords: { x: 262, y: 96 },
+    levelReq: 18,
+    hazard: "LOW",
+    fuelCost: 1240,
+    },
+  {
+    id: "PLX-8842",
+    cargo: "Cryo Medical Vials",
+    category: "fragile",
+    weight: 8.4,
+    distance: 42.8,
+    reward: 18400,
+    xp: 450,
+    timeLimit: 35,
+    pickup: "Pillbox Medical",
+    dropoff: "Sandy Shores Clinic",
+    pickupCoords: { x: 330, y: 585 },
+    dropoffCoords: { x: 560, y: 300 },
+    levelReq: 12,
+    hazard: "NONE",
+    fuelCost: 620,
+  },
+  {
+    id: "PLX-8843",
+    cargo: "Bullion Transfer Crates",
+    category: "highvalue",
+    weight: 12.6,
+    distance: 28.1,
+    reward: 41200,
+    xp: 880,
+    timeLimit: 22,
+    pickup: "Pacific Standard Vault",
+    dropoff: "Fort Zancudo Depot",
+    pickupCoords: { x: 290, y: 610 },
+    dropoffCoords: { x: 168, y: 372 },
+    levelReq: 22,
+    hazard: "MEDIUM",
+    fuelCost: 480,
+  },
+  {
+    id: "PLX-8844",
+    cargo: "Refined Petroleum",
+    category: "hazardous",
+    weight: 29.8,
+    distance: 71.6,
+    reward: 33600,
+    xp: 940,
+    timeLimit: 55,
+    pickup: "RON Refinery",
+    dropoff: "Grapeseed Fuel Station",
+    pickupCoords: { x: 216, y: 648 },
+    dropoffCoords: { x: 612, y: 190 },
+    levelReq: 26,
+    hazard: "EXTREME",
+    fuelCost: 1810,
+  },
+  {
+    id: "PLX-8845",
+    cargo: "Lumber Pallets",
+    category: "standard",
+    weight: 22.4,
+    distance: 38.2,
+    reward: 12600,
+    xp: 320,
+    timeLimit: 40,
+    pickup: "Paleto Sawmill",
+    dropoff: "Vespucci Construction",
+    pickupCoords: { x: 250, y: 110 },
+    dropoffCoords: { x: 196, y: 604 },
+    levelReq: 4,
+    hazard: "NONE",
+    fuelCost: 700,
+  },
+  {
+    id: "PLX-8846",
+    cargo: "Turbine Assemblies",
+    category: "heavy",
+    weight: 41.5,
+    distance: 84.3,
+    reward: 38900,
+    xp: 1040,
+    timeLimit: 62,
+    pickup: "LSIA Cargo Terminal",
+    dropoff: "RON Wind Farm",
+    pickupCoords: { x: 258, y: 700 },
+    dropoffCoords: { x: 690, y: 402 },
+    levelReq: 28,
+    hazard: "LOW",
+    fuelCost: 2010,
+  },
+  {
+    id: "PLX-8847",
+    cargo: "Prototype Display Panels",
+    category: "fragile",
+    weight: 6.2,
+    distance: 19.4,
+    reward: 15200,
+    xp: 380,
+    timeLimit: 18,
+    pickup: "Mirror Park Depot",
+    dropoff: "Downtown Vinewood",
+    pickupCoords: { x: 420, y: 540 },
+    dropoffCoords: { x: 348, y: 470 },
+    levelReq: 8,
+    hazard: "NONE",
+    fuelCost: 260,
+  },
+  {
+    id: "PLX-8848",
+    cargo: "Encrypted Server Racks",
+    category: "highvalue",
+    weight: 14.8,
+    distance: 55.7,
+    reward: 29700,
+    xp: 700,
+    timeLimit: 44,
+    pickup: "Maze Bank Tower",
+    dropoff: "Humane Labs",
+    pickupCoords: { x: 300, y: 566 },
+    dropoffCoords: { x: 700, y: 288 },
+    levelReq: 20,
+    hazard: "MEDIUM",
+    fuelCost: 1120,
+  },
+];
+
+export const mockActiveJob: ActiveJob = {
+  orderId: "PLX-8839",
+  cargo: "Industrial Coolant Drums",
+  pickup: "Port of Los Santos",
+  dropoff: "Sandy Shores Depot",
+  etaMinutes: 14,
+  remainingKm: 18.6,
+  totalKm: 52.4,
+  cargoHealth: 96,
+  reward: 26400,
+};
+
+const truck = (
+  slot: number,
+  name: string,
+  model: string,
+  classTag: string,
+  price: number,
+  topSpeed: number,
+  payload: number,
+  fuel: number,
+  condition: number,
+  owned: boolean,
+  equipped: boolean,
+  vin: string,
+): Vehicle => ({
+  slot,
+  name,
+  model,
+  classTag,
+  price,
+  rentPrice: Math.round(price * 0.012),
+  topSpeed,
+  payload,
+  fuel,
+  condition,
+  owned,
+  equipped,
+  vin,
+  kind: "truck",
+});
+
+export const mockVehiclesOwned: Vehicle[] = [
+  truck(1, "Phantom Wedge", "phantom2", "Class 8 Heavy Duty", 180000, 158, 38, 420, 92, true, true, "VIN-4F81-PHW"),
+  truck(2, "Hauler Custom", "hauler", "Class 7 Line Haul", 120000, 146, 32, 380, 78, true, false, "VIN-9C22-HLC"),
+  truck(3, "Packer", "packer", "Class 8 Multi-Deck", 165000, 138, 41, 460, 64, true, false, "VIN-2B47-PKR"),
+];
+
+export const mockVehiclesShop: Vehicle[] = [
+  truck(4, "Phantom Custom", "phantom3", "Class 8 Show Rig", 245000, 172, 36, 500, 100, false, false, "VIN-7X10-PHC"),
+  truck(5, "Terminal Tractor", "docktug", "Class 5 Yard Mule", 68000, 92, 24, 200, 100, false, false, "VIN-5T88-DTG"),
+  truck(6, "Benson Freight", "benson", "Class 6 Box Truck", 92000, 132, 18, 240, 100, false, false, "VIN-1N56-BNS"),
+];
+
+const trailer = (
+  slot: number,
+  name: string,
+  model: string,
+  classTag: string,
+  price: number,
+  payload: number,
+  condition: number,
+  owned: boolean,
+  equipped: boolean,
+  vin: string,
+): Vehicle => ({
+  slot,
+  name,
+  model,
+  classTag,
+  price,
+  rentPrice: Math.round(price * 0.012),
+  topSpeed: 0,
+  payload,
+  fuel: 0,
+  condition,
+  owned,
+  equipped,
+  vin,
+  kind: "trailer",
+});
+
+export const mockTrailersOwned: Vehicle[] = [
+  trailer(1, "Curtainside 48'", "trailers", "Dry Freight", 60000, 28, 88, true, true, "VIN-TR01-CRT"),
+  trailer(2, "Reefer Unit", "trailers2", "Temp Controlled", 84000, 24, 71, true, false, "VIN-TR02-RFR"),
+];
+
+export const mockTrailerShop: Vehicle[] = [
+  trailer(3, "Tanker 9000L", "tanker", "Hazardous Liquids", 128000, 30, 100, false, false, "VIN-TR03-TNK"),
+  trailer(4, "Lowboy Deck", "trailers3", "Oversize Load", 152000, 46, 100, false, false, "VIN-TR04-LWB"),
+  trailer(5, "Armored Vault Box", "armytrailer", "High Value Secure", 210000, 20, 100, false, false, "VIN-TR05-AVB"),
+];
+
+export const mockSkillBranches: SkillBranch[] = [
+  {
+    id: "longdistance",
+    name: "Long Distance",
+    accent: "amber",
+    nodes: [
+      { id: "ld1", name: "Endurance I", description: "Extended haul stamina.", perk: "+8% payout over 40km", cost: 1, tier: 1, state: "acquired" },
+      { id: "ld2", name: "Endurance II", description: "Deep route optimisation.", perk: "+14% payout over 60km", cost: 1, tier: 2, state: "acquired", requires: "ld1" },
+      { id: "ld3", name: "Cross-County", description: "County-wide contracts.", perk: "+22% payout over 80km", cost: 2, tier: 3, state: "available", requires: "ld2" },
+    ],
+  },
+  {
+    id: "heavyweight",
+    name: "Heavy Weight",
+    accent: "cyan",
+    nodes: [
+      { id: "hw1", name: "Load Master I", description: "Weight distribution training.", perk: "+6% payload capacity", cost: 1, tier: 1, state: "acquired" },
+      { id: "hw2", name: "Load Master II", description: "Axle stress control.", perk: "+12% payload capacity", cost: 1, tier: 2, state: "available", requires: "hw1" },
+      { id: "hw3", name: "Titan Hauler", description: "Oversize permits.", perk: "+25% heavy contract payout", cost: 3, tier: 3, state: "locked", requires: "hw2" },
+    ],
+  },
+  {
+    id: "fragile",
+    name: "Fragile Cargo",
+    accent: "emerald",
+    nodes: [
+      { id: "fc1", name: "Soft Hands", description: "Suspension tuning.", perk: "-20% cargo damage", cost: 1, tier: 1, state: "acquired" },
+      { id: "fc2", name: "Glass Courier", description: "Certified fragile handler.", perk: "+18% payout on fragile goods", cost: 2, tier: 2, state: "available", requires: "fc1" },
+      { id: "fc3", name: "Zero Impact", description: "Gyro-stabilised racks.", perk: "-45% cargo damage", cost: 3, tier: 3, state: "locked", requires: "fc2" },
+    ],
+  },
+  {
+    id: "highvalue",
+    name: "High Value",
+    accent: "amber",
+    nodes: [
+      { id: "hv1", name: "Escort Protocol", description: "Route secrecy.", perk: "-15% ambush chance", cost: 1, tier: 1, state: "available" },
+      { id: "hv2", name: "Vault Certified", description: "Bonded carrier licence.", perk: "+20% high-value payout", cost: 2, tier: 2, state: "locked", requires: "hv1" },
+      { id: "hv3", name: "Black Convoy", description: "Unmarked convoy runs.", perk: "+35% high-value payout", cost: 4, tier: 3, state: "locked", requires: "hv2" },
+    ],
+  },
+  {
+    id: "eco",
+    name: "Eco Driving",
+    accent: "emerald",
+    nodes: [
+      { id: "ec1", name: "Fuel Sense", description: "Throttle discipline.", perk: "-12% fuel burn", cost: 1, tier: 1, state: "acquired" },
+      { id: "ec2", name: "Aero Package", description: "Cab fairings.", perk: "-22% fuel burn", cost: 2, tier: 2, state: "available", requires: "ec1" },
+      { id: "ec3", name: "Zero Waste", description: "Regenerative braking.", perk: "-35% fuel burn", cost: 3, tier: 3, state: "locked", requires: "ec2" },
+    ],
+  },
+  {
+    id: "jit",
+    name: "Just-in-Time",
+    accent: "rose",
+    nodes: [
+      { id: "jt1", name: "Tight Window", description: "Dispatch scheduling.", perk: "+10% on-time bonus", cost: 1, tier: 1, state: "available" },
+      { id: "jt2", name: "Priority Lane", description: "Traffic clearance.", perk: "+5m on every timer", cost: 2, tier: 2, state: "locked", requires: "jt1" },
+      { id: "jt3", name: "Rapid Freight", description: "Express certification.", perk: "+30% on-time bonus", cost: 4, tier: 3, state: "locked", requires: "jt2" },
+    ],
+  },
+];
+
+export const mockDriverSlots: DriverSlot[] = [
+  { slot: 1, state: "hired", driverName: "M. KOVAC", vehicle: "Hauler Custom", ratePerHour: 450, status: "ON ROUTE - DELIVERING LUMBER", progress: 62, pending: 1280 },
+  { slot: 2, state: "hired", driverName: "D. ADEYEMI", vehicle: "Packer", ratePerHour: 620, status: "LOADING - PORT OF LS", progress: 24, pending: 940 },
+  { slot: 3, state: "hired", driverName: "S. LINDQVIST", vehicle: "Benson Freight", ratePerHour: 380, status: "RETURNING TO DEPOT", progress: 88, pending: 2210 },
+  { slot: 4, state: "purchasable", price: 25000, incomePreview: 500 },
+  { slot: 5, state: "purchasable", price: 42000, incomePreview: 720 },
+  { slot: 6, state: "locked", levelReq: 30 },
+];
+
+export const mockCompany: CompanyData = {
+  name: "POLARIX FREIGHT SYNDICATE",
+  tag: "PLX",
+  tier: "TIER IV — CONTINENTAL",
+  vault: 4_862_400,
+  weekly: [
+    { label: "MON", payout: 182000, volume: 42 },
+    { label: "TUE", payout: 214000, volume: 51 },
+    { label: "WED", payout: 168000, volume: 38 },
+    { label: "THU", payout: 296000, volume: 64 },
+    { label: "FRI", payout: 342000, volume: 78 },
+    { label: "SAT", payout: 410000, volume: 92 },
+    { label: "SUN", payout: 268000, volume: 59 },
+  ],
+  members: [
+    { id: "m1", name: "R. VALDEZ", role: "OWNER", contribution: 1_284_000, online: true },
+    { id: "m2", name: "K. OSEI", role: "DISPATCHER", contribution: 842_500, online: true },
+    { id: "m3", name: "J. MORETTI", role: "SENIOR", contribution: 610_200, online: false },
+    { id: "m4", name: "A. NAKAMURA", role: "SENIOR", contribution: 588_900, online: true },
+    { id: "m5", name: "T. BRENNAN", role: "RECRUIT", contribution: 96_400, online: false },
+    { id: "m6", name: "L. FONSECA", role: "RECRUIT", contribution: 42_100, online: true },
+  ],
+  perks: [
+    { id: "p1", name: "Fleet Insurance", description: "Cargo losses reimbursed at 60%.", active: true },
+    { id: "p2", name: "Bulk Fuel Contract", description: "-18% fuel cost company-wide.", active: true },
+    { id: "p3", name: "Priority Docking", description: "Skip port queues at LS terminal.", active: false },
+    { id: "p4", name: "Corporate Escort", description: "Armed escort on high-value runs.", active: false },
+  ],
+  invitations: [
+    { id: "i1", name: "V. PETROV", sentAt: "12m ago" },
+    { id: "i2", name: "H. DUBOIS", sentAt: "1h ago" },
+  ],
+};
+
+export const mockParty: Party = {
+  active: true,
+  size: 3,
+  max: 4,
+  members: [
+    { id: "pm1", name: "R. VALDEZ", distanceFromLeader: 0, ready: true, leader: true, cargo: "Coolant Drums" },
+    { id: "pm2", name: "K. OSEI", distanceFromLeader: 0.4, ready: true, leader: false, cargo: "Steel Beams" },
+    { id: "pm3", name: "J. MORETTI", distanceFromLeader: 2.8, ready: false, leader: false, cargo: "Lumber" },
+  ],
+};
+
+export const mockInvitations: Invitation[] = [
+  { id: "inv1", from: "A. NAKAMURA", convoy: "NORTHBOUND RUN" },
+];
+
+export const mockNotifications: NotificationItem[] = [
+  { id: "n1", title: "Contract completed", body: "PLX-8836 delivered — $22,400 credited.", time: "4m", level: "success", read: false },
+  { id: "n2", title: "Cargo integrity warning", body: "Fragile load dropped to 71%.", time: "18m", level: "warning", read: false },
+  { id: "n3", title: "Convoy invite", body: "A. NAKAMURA invited you to NORTHBOUND RUN.", time: "32m", level: "info", read: true },
+];
+
+export const mockHudData: HudData = {
+  visible: true,
+  step: 1,
+  destination: "Sandy Shores Depot",
+  distance: 1.4,
+  cargoCondition: 98,
+  secondsRemaining: 872,
+  cargo: "Industrial Coolant Drums",
+};
+
+export const mockHistory: HistoryEntry[] = [
+  { id: "PLX-8836", cargo: "Cement Mix", route: "LS Port → Sandy Shores", payout: 22400, xp: 540, date: "08:42", rating: "PRISTINE" },
+  { id: "PLX-8830", cargo: "Electronics", route: "LSIA → Paleto Bay", payout: 31800, xp: 720, date: "07:15", rating: "DAMAGED" },
+  { id: "PLX-8822", cargo: "Livestock Feed", route: "Grapeseed → Vinewood", payout: 14200, xp: 310, date: "Yesterday", rating: "PRISTINE" },
+  { id: "PLX-8814", cargo: "Fuel Drums", route: "RON Refinery → Harmony", payout: 27600, xp: 660, date: "Yesterday", rating: "FAILED" },
+];
+
+export const mockLeaderboard: LeaderboardEntry[] = [
+  { rank: 1, name: "K. OSEI", deliveries: 612, earnings: 5_240_000, level: 39 },
+  { rank: 2, name: "R. VALDEZ", deliveries: 418, earnings: 3_872_400, level: 24 },
+  { rank: 3, name: "A. NAKAMURA", deliveries: 388, earnings: 3_410_000, level: 31 },
+  { rank: 4, name: "J. MORETTI", deliveries: 344, earnings: 2_980_500, level: 27 },
+  { rank: 5, name: "H. DUBOIS", deliveries: 291, earnings: 2_112_000, level: 22 },
+];
+
+export const mockMissions: AdminMission[] = [
+  {
+    id: "cm-001",
+    title: "Cayo Contraband Run",
+    cargoType: "High Value",
+    rewardFormula: "distance * 480 + weight * 210",
+    pickup: { x: 1274.44, y: -3121.06, z: 5.87 },
+    dropoff: { x: 68.12, y: 6421.55, z: 31.42 },
+    minLevel: 20,
+    maxLevel: 99,
+    enabled: true,
+  },
+  {
+    id: "cm-002",
+    title: "Wind Farm Turbine Lift",
+    cargoType: "Heavy",
+    rewardFormula: "distance * 620 + weight * 340",
+    pickup: { x: -337.18, y: -2790.4, z: 5.0 },
+    dropoff: { x: 2354.9, y: 1830.2, z: 101.1 },
+    minLevel: 28,
+    maxLevel: 99,
+    enabled: true,
+  },
+  {
+    id: "cm-003",
+    title: "Night Reefer Express",
+    cargoType: "Fragile",
+    rewardFormula: "distance * 390 + timeBonus",
+    pickup: { x: 812.3, y: -2990.7, z: 6.02 },
+    dropoff: { x: 1698.4, y: 3760.1, z: 34.7 },
+    minLevel: 10,
+    maxLevel: 60,
+    enabled: false,
+  },
+];
